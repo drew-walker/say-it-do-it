@@ -9,6 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node www.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -17,5 +18,8 @@
     "activation",
     "speech"
   ],
-  "author": "Drew Walker <drew.walker@gmail.com>"
+  "author": "Drew Walker <drew.walker@gmail.com>",
+  "engines" : {
+    "node": "0.10.x"
+  }
 }
