@@ -2,7 +2,7 @@ var express = require('express'),
     request = require('request'),
     app = express();
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 5000));
 
 var twitterConsumerKey = process.env.TWITTER_CONSUMER_KEY;
 var twitterConsumerSecret = process.env.TWITTER_CONSUMER_SECRET;
