@@ -2,6 +2,8 @@ var express = require('express'),
     request = require('request'),
     app = express();
 
+app.set('port', (process.env.PORT || 3000));
+
 var twitterConsumerKey = process.env.TWITTER_CONSUMER_KEY;
 var twitterConsumerSecret = process.env.TWITTER_CONSUMER_SECRET;
 var twitterAccessToken;
@@ -47,7 +49,7 @@ app.get('/api/v1/tweet/:screen_name', function(req, res) {
     });
 });
 
-app.listen(80);
+app.listen(app.get('port'));
 
 //var fs = require('fs'),
 //    https = require('https'),
