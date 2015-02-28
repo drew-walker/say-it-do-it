@@ -1,0 +1,21 @@
+{
+  "name": "say-it-do-it",
+  "version": "0.0.1",
+  "description": "SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.",
+  "main": "www.js",
+  "dependencies": {
+    "express": "^4.12.0",
+    "request": "^2.53.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "siri",
+    "voice",
+    "activation",
+    "speech"
+  ],
+  "author": "Drew Walker <drew.walker@gmail.com>"
+}

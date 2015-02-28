@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h3 class="modal-title">Do</h3>
+</div>
+<div class="modal-body">
+    <p>What would you like to do when you say "{{command}}"?</p>
+    <table class="table table-bordered table-hover">
+        <tr ng-repeat="action in availableActions" ng-click="selectAction(action)">
+            <td>{{action.name}} <span class="glyphicon glyphicon-ok" ng-show="action==selectedAction"></span></td>
+        </tr>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
