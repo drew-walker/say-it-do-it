@@ -8,15 +8,53 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
 
     $scope.recognizing = false;
     $scope.final_transcript = '';
-    $scope.commands = [];
+    $scope.commands = [{
+        trigger : 'turn off the living room light',
+        do : {
+            name: 'Turn off the lights',
+            call: "/api/v1/hue/lights/3/off",
+            callback: function(response) {
+                //console.log(response);
+            }
+        }
+    }, {
+        trigger : 'turn on the living room light',
+        do : {
+            name: 'Turn on the lights',
+            call: "/api/v1/hue/lights/3/on",
+            callback: function(response) {
+                //console.log(response);
+            }
+        }
+    }, {
+        trigger : 'turn up the living room light',
+        do : {
+            name: 'Brighten the lights',
+            call: "/api/v1/hue/lights/3/brighten",
+            callback: function(response) {
+                //console.log(response);
+            }
+        }
+    }, {
+        trigger : 'turn down the living room light',
+        do : {
+            name: 'Darken the lights',
+            call: "/api/v1/hue/lights/3/darken",
+            callback: function(response) {
+                //console.log(response);
+            }
+        }
+    }];
 
     $scope.do = function(trigger) {
         var command = $scope.commands.filter(function(command) {
             return command.trigger == trigger;
         })[0];
         if (command && command.do) {
-            $http.get(command.do.call).success(function(tweet) {
-                command.do.data = tweet;
+            command.do.running = true;
+            $http.get(command.do.call).success(function() {
+                command.do.callback.apply(this, arguments);
+                command.do.running = false;
             });
         }
     };
@@ -48,10 +86,6 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
         $scope.$apply(function() {
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
-                    console.log(event.results[i][0].transcript);
-                    //$scope.commands.push({
-                    //    trigger:event.results[i][0].transcript
-                    //});
 
                     var modalInstance = $modal.open({
                         templateUrl: 'views/do.html',
@@ -102,8 +136,8 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
                 $scope.$apply(function() {
                     $scope.commands = $scope.commands.map(function(command) {
                         if ($scope.final_transcript === command.trigger) {
-                            $scope.do(command.trigger);
                             command.matched = true;
+                            $scope.do(command.trigger);
                         } else {
                             command.matched = false;
                         }
