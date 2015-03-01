@@ -9,58 +9,74 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
     $scope.recognizing = false;
     $scope.final_transcript = '';
     $scope.commands = [{
-        trigger : 'turn off the living room light',
+        trigger : 'turn off (.+)',
         do : {
             name: 'Turn off the lights',
-            call: "/api/v1/hue/lights/3/off",
+            call: function(command, args) {
+                $http.get("/api/v1/hue/lights/2/off").success(function() {
+                    command.do.callback.apply(this, arguments);
+                    command.do.running = false;
+                });
+            },
             callback: function(response) {
                 //console.log(response);
             }
         }
     }, {
-        trigger : 'turn on the living room light',
+        trigger : 'turn on the lights',
         do : {
             name: 'Turn on the lights',
-            call: "/api/v1/hue/lights/3/on",
+            call: function(command, args) {
+                $http.get("/api/v1/hue/lights/2/on").success(function() {
+                    command.do.callback.apply(this, arguments);
+                    command.do.running = false;
+                });
+            },
             callback: function(response) {
                 //console.log(response);
             }
         }
     }, {
-        trigger : 'turn up the living room light',
+        trigger : 'turn up the lights',
         do : {
             name: 'Brighten the lights',
-            call: "/api/v1/hue/lights/3/brighten",
+            call: function(command, args) {
+                $http.get("/api/v1/hue/lights/2/brighten").success(function() {
+                    command.do.callback.apply(this, arguments);
+                    command.do.running = false;
+                });
+            },
             callback: function(response) {
                 //console.log(response);
             }
         }
     }, {
-        trigger : 'turn down the living room light',
+        trigger : 'turn down the lights',
         do : {
             name: 'Darken the lights',
-            call: "/api/v1/hue/lights/3/darken",
+            call: function(command, args) {
+                $http.get("/api/v1/hue/lights/2/darken").success(function() {
+                    command.do.callback.apply(this, arguments);
+                    command.do.running = false;
+                });
+            },
             callback: function(response) {
                 //console.log(response);
             }
         }
     }];
 
-    $scope.do = function(trigger) {
+    $scope.do = function(trigger, args) {
         var command = $scope.commands.filter(function(command) {
             return command.trigger == trigger;
         })[0];
         if (command && command.do) {
             command.do.running = true;
-            $http.get(command.do.call).success(function() {
-                command.do.callback.apply(this, arguments);
-                command.do.running = false;
-            });
+            command.do.call(command, args);
         }
     };
 
     $scope.add = function(command) {
-        console.log(command);
         $scope.commands.push({
             trigger:command
         });
@@ -131,13 +147,13 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
             if (event.results[i].isFinal) {
                 $scope.final_transcript = event.results[i][0].transcript;
 
-                console.log($scope.final_transcript);
-
                 $scope.$apply(function() {
                     $scope.commands = $scope.commands.map(function(command) {
-                        if ($scope.final_transcript === command.trigger) {
+                        var matches = new RegExp(command.trigger, "g").exec($scope.final_transcript);
+                        if (matches) {
+                            var args = matches.splice(1, matches.length - 1);
                             command.matched = true;
-                            $scope.do(command.trigger);
+                            $scope.do(command.trigger, args);
                         } else {
                             command.matched = false;
                         }

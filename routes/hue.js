@@ -1,5 +1,5 @@
 var express = require('express'),
-    Hue = require('../lib/node-philips-hue-api'),
+    Hue = require('philips-hue-api'),
     hue = Hue(process.env.HUE_API_URL),
     router = express.Router();
 
