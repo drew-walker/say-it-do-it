@@ -13,7 +13,8 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
         do : {
             name: 'Turn off the lights',
             call: function(command, args) {
-                $http.get("/api/v1/hue/lights/2/off").success(function() {
+                var lightIdentifier = args[0].replace(/ /g, '-') ;
+                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/off").success(function() {
                     command.do.callback.apply(this, arguments);
                     command.do.running = false;
                 });
@@ -23,11 +24,12 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
             }
         }
     }, {
-        trigger : 'turn on the lights',
+        trigger : 'turn on (.+)',
         do : {
             name: 'Turn on the lights',
             call: function(command, args) {
-                $http.get("/api/v1/hue/lights/2/on").success(function() {
+                var lightIdentifier = args[0].replace(/ /g, '-') ;
+                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/on").success(function() {
                     command.do.callback.apply(this, arguments);
                     command.do.running = false;
                 });
@@ -37,11 +39,12 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
             }
         }
     }, {
-        trigger : 'turn up the lights',
+        trigger : 'turn up (.+)',
         do : {
             name: 'Brighten the lights',
             call: function(command, args) {
-                $http.get("/api/v1/hue/lights/2/brighten").success(function() {
+                var lightIdentifier = args[0].replace(/ /g, '-') ;
+                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/brighten").success(function() {
                     command.do.callback.apply(this, arguments);
                     command.do.running = false;
                 });
@@ -51,11 +54,12 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
             }
         }
     }, {
-        trigger : 'turn down the lights',
+        trigger : 'turn down (.+)',
         do : {
             name: 'Darken the lights',
             call: function(command, args) {
-                $http.get("/api/v1/hue/lights/2/darken").success(function() {
+                var lightIdentifier = args[0].replace(/ /g, '-') ;
+                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/darken").success(function() {
                     command.do.callback.apply(this, arguments);
                     command.do.running = false;
                 });
