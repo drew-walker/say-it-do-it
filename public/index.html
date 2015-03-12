@@ -12,7 +12,7 @@
                     <a class="navbar-brand">SayItDoIt</a>
                 </div>
                 <ul class="nav navbar-nav" ng-hide="commands.length === 0">
-                    <li><a href=""><span class="glyphicon glyphicon-volume-up" ng-class="{ 'pulse' : recognizing }" ng-click="listen()"></span></a></li>
+                    <li><a ng-click="listen()"><span class="glyphicon glyphicon-volume-up" ng-class="{ 'pulse' : recognizing }"></span> <span ng-show="recognizing">Say it and I'll do it</span><span ng-show="!recognizing && final_transcript">{{final_transcript}}</span></a></li>
                 </ul>
                 <a ng-hide="commands.length === 0" class="btn btn-default navbar-btn navbar-right" ng-click="recordCommand()" style="margin-right:0;">+</a>
                 <ul class="nav navbar-nav navbar-right">

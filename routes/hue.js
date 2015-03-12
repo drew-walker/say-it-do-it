@@ -1,6 +1,6 @@
 var express = require('express'),
     Hue = require('philips-hue-api'),
-    hue = Hue(process.env.HUE_API_URL),
+    hue = Hue(process.env.HUE_USERNAME, process.env.HUE_EMAIL, process.env.HUE_PASSWORD),
     router = express.Router();
 
 router.get('/lights/:id/brighten', function(req, res) {
@@ -49,17 +49,19 @@ function getLightNameFromSlug(slug) {
 router.get('/lights/:id/on', function(req, res) {
     var lightIdentifier = isNaN(req.params.id) ? getLightNameFromSlug(req.params.id) : +req.params.id;
 
-    hue.lights(lightIdentifier).on();
-
-    res.sendStatus(200);
+    hue.authenticate().then(function(lights) {
+        lights(lightIdentifier).on();
+        res.sendStatus(200);
+    });
 });
 
 router.get('/lights/:id/off', function(req, res) {
     var lightIdentifier = isNaN(req.params.id) ? getLightNameFromSlug(req.params.id) : +req.params.id;
 
-    hue.lights(lightIdentifier).off();
-
-    res.sendStatus(200);
+    hue.authenticate().then(function(lights) {
+        lights(lightIdentifier).off();
+        res.sendStatus(200);
+    });
 });
 
 module.exports = router;
