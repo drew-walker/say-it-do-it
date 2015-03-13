@@ -6,7 +6,7 @@
   "dependencies": {
     "bower": "^1.3.12",
     "express": "^4.12.0",
-    "philips-hue-api": "^0.1.4",
+    "philips-hue-api": "^0.1.5",
     "request": "^2.53.0"
   },
   "devDependencies": {},
