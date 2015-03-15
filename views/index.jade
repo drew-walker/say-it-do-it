@@ -17,11 +17,14 @@ html(ng-app="SayIt")
                             span(ng-show="!recognizing && final_transcript") {{final_transcript}}
                 ul.nav.navbar-nav.navbar-right(ng-controller="LoginController")
                     li(ng-show="!loggedIn")
-                        a(href="" style="margin-right:10px;" ng-click="login('twitter')") T
+                        a.login-icon(href="" ng-click="login('twitter')")
+                            img(src="images/twitter-icon-circle.png")
                     li(ng-show="!loggedIn")
-                        a(href="" style="margin-right:10px;" ng-click="login('facebook')") F
+                        a.login-icon(href="" ng-click="login('facebook')")
+                            img(src="images/facebook-icon-circle.png")
                     li(ng-show="!loggedIn")
-                        a(href="" style="margin-right:10px;" ng-click="login('google')") G
+                        a.login-icon(href="" ng-click="login('google')")
+                            img(src="images/google-icon-circle.png")
                     li(ng-show="loggedIn && recognizing")
                         a
                             span.glyphicon.glyphicon-refresh.spin
