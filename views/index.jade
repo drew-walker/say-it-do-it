@@ -1,0 +1,48 @@
+doctype html
+html(ng-app="SayIt")
+    head
+        title SayItDoIt
+        link(rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css")
+        link(rel="stylesheet" href="styles/main.css")
+    body(ng-controller="RootController")
+        nav.navbar.navbar-default.navbar-static-top
+            .container-fluid
+                .navbar-header
+                    a.navbar-brand SayItDoIt
+                ul.nav.navbar-nav(ng-hide="commands.length === 0")
+                    li
+                        a(ng-click="listen()")
+                            span.glyphicon.glyphicon-volume-up(ng-class="{ 'pulse' : recognizing }")
+                            span(ng-show="recognizing") Say it and I'll do it
+                            span(ng-show="!recognizing && final_transcript") {{final_transcript}}
+                a.btn.btn-default.navbar-btn.navbar-right(ng-hide="commands.length === 0" ng-click="recordCommand()" style="margin-right:0;") +
+                // a.btn.btn-default.navbar-btn.navbar-right(href="" style="margin-right:10px;") Sign In With Twitter
+                ul.nav.navbar-nav.navbar-right
+                    li(ng-show="recognizing")
+                        a
+                            span.glyphicon.glyphicon-refresh.spin
+        .text-center(ng-show="commands.length === 0")
+            p SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.
+            p
+                a.btn.btn-default.btn-lg(ng-click="recordCommand()") +
+            p.text-muted Click '+' and start talking to setup your first voice command.
+        div(ng-hide="commands.length === 0")
+            table.table.table-hover.table-bordered
+                tr
+                    th(width="50%") Say
+                    th(width="50%") Do
+                tr(ng-repeat="command in commands" ng-class="{ 'success' : command.matched === true }" ng-mouseover="showControls=true" ng-mouseout="showControls=false")
+                    td "{{command.trigger}}"
+                    td(style="position:relative")
+                        span.btn-group(ng-show="showControls" style="position:absolute; right:-1px; top:-1px;")
+                            button.btn.btn-primary(ng-click="do(command.trigger)" style="height:38px; border-radius:0;") RUN
+                            button.btn.btn-danger(style="height:38px; border-radius:0;") DELETE
+                        span {{command.do.name}}
+                        span.glyphicon.glyphicon-refresh(ng-show="command.do.running" ng-class="{ 'spin' : command.do.running }")
+            p.text-muted.text-center(ng-show="commands.length < 3") Click '+' to setup another voice command.
+    script(src="bower_components/angular/angular.min.js")
+    script(src="bower_components/angular-bootstrap/ui-bootstrap.js")
+    script(src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js")
+    script(src="scripts/app.js")
+    script(src="scripts/controllers/root-controller.js")
+    script(src="scripts/controllers/do-modal-controller.js")
