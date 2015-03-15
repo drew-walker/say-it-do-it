@@ -15,12 +15,25 @@ html(ng-app="SayIt")
                             span.glyphicon.glyphicon-volume-up(ng-class="{ 'pulse' : recognizing }")
                             span(ng-show="recognizing") Say it and I'll do it
                             span(ng-show="!recognizing && final_transcript") {{final_transcript}}
-                a.btn.btn-default.navbar-btn.navbar-right(ng-hide="commands.length === 0" ng-click="recordCommand()" style="margin-right:0;") +
-                // a.btn.btn-default.navbar-btn.navbar-right(href="" style="margin-right:10px;") Sign In With Twitter
-                ul.nav.navbar-nav.navbar-right
-                    li(ng-show="recognizing")
+                ul.nav.navbar-nav.navbar-right(ng-controller="LoginController")
+                    li(ng-show="!loggedIn")
+                        a(href="" style="margin-right:10px;" ng-click="login('twitter')") T
+                    li(ng-show="!loggedIn")
+                        a(href="" style="margin-right:10px;" ng-click="login('facebook')") F
+                    li(ng-show="!loggedIn")
+                        a(href="" style="margin-right:10px;" ng-click="login('google')") G
+                    li(ng-show="loggedIn && recognizing")
                         a
                             span.glyphicon.glyphicon-refresh.spin
+                    li(ng-show="loggedIn && commands.length > 0")
+                        a(href="" ng-click="recordCommand()" style="margin-right:10px;") +
+                    li(ng-show="loggedIn" dropdown)
+                        a(href="" class="dropdown-toggle" dropdown-toggle style="padding:0; margin:10px; border-radius:15px;overflow:hidden;")
+                            img(ng-src="{{imageUrl}}" style="height:30px; display:block")
+                        ul.dropdown-menu
+                            li(role="presentation" class="dropdown-header") {{name}}
+                            li
+                                a(href="" ng-click="logout()") Log out
         .text-center(ng-show="commands.length === 0")
             p SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.
             p
@@ -43,6 +56,23 @@ html(ng-app="SayIt")
     script(src="bower_components/angular/angular.min.js")
     script(src="bower_components/angular-bootstrap/ui-bootstrap.js")
     script(src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js")
+    script(src="bower_components/firebase/firebase.js")
+    script(src="bower_components/angularfire/dist/angularfire.min.js")
     script(src="scripts/app.js")
+    script.
+        angular.module('SayIt').provider('config', function() {
+            var config = {
+                FIREBASE_URL : '#{constants.FIREBASE_URL}'
+            };
+            return {
+                set: function (settings) {
+                    config = settings;
+                },
+                $get: function () {
+                    return config;
+                }
+            };
+        });
+    script(src="scripts/controllers/login-controller.js")
     script(src="scripts/controllers/root-controller.js")
     script(src="scripts/controllers/do-modal-controller.js")

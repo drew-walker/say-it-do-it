@@ -5,19 +5,27 @@ var express = require('express'),
 app.set('port', (process.env.PORT || 5000));
 app.set('view engine', 'jade');
 
+function getTemplateData(callback) {
+    request(process.env.SAYITDOIT_URL + '/api/v1/firebase/url', function(error, response, body) {
+        callback({
+            constants: {
+                FIREBASE_URL: body
+            }
+        })
+    });
+}
+
 app.get('/', function(req, res) {
-    res.render('index');
+    getTemplateData(function(data) {
+        res.render('index', data);
+    });
 });
 
 app.use(express.static(__dirname + '/public'));
 
-var twitter = require('./routes/twitter.js'),
-    hue = require('./routes/hue.js');
-    //signIn = require('./routes/sign-in.js');
-
-app.use('/api/v1/twitter', twitter);
-app.use('/api/v1/hue', hue);
-//app.use('/api/v1/sign-in', signIn);
+app.use('/api/v1/twitter', require('./routes/twitter.js'));
+app.use('/api/v1/hue', require('./routes/hue.js'));
+app.use('/api/v1/firebase', require('./routes/firebase.js'));
 
 app.listen(app.get('port'));
 

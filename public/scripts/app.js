@@ -1,1 +1,1 @@
-angular.module('SayIt', ['ui.bootstrap']);
+angular.module('SayIt', ['ui.bootstrap', 'firebase']);
