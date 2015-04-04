@@ -8,7 +8,7 @@ angular.module('SayIt').controller('LoginController', ["$scope", "config",
                 if (error) {
                     console.log("Login Failed!", error);
                 } else {
-                    console.log("Authenticated successfully with payload:", authData);
+                    //console.log("Authenticated successfully with payload:", authData);
                 }
             });
         };
@@ -27,6 +27,8 @@ angular.module('SayIt').controller('LoginController', ["$scope", "config",
                     return authData.facebook.displayName;
                 case 'google':
                     return authData.google.displayName;
+                case 'anonymous':
+                    return authData.auth.uid;
             }
         }
 
@@ -40,6 +42,8 @@ angular.module('SayIt').controller('LoginController', ["$scope", "config",
                     return authData.facebook.cachedUserProfile.picture.data.url;
                 case 'google':
                     return authData.google.cachedUserProfile.picture;
+                case 'anonymous':
+                    return "images/guest.png";
             }
         }
 
@@ -55,6 +59,8 @@ angular.module('SayIt').controller('LoginController', ["$scope", "config",
                 $scope.imageUrl = getImage(authData);
             } else {
                 $scope.loggedIn = false;
+                $scope.name = null;
+                $scope.imageUrl = null;
             }
         }
 

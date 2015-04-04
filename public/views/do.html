@@ -3,11 +3,14 @@
 </div>
 <div class="modal-body">
     <p>What would you like to do when you say "{{command}}"?</p>
-    <table class="table table-bordered table-hover">
-        <tr ng-repeat="action in availableActions" ng-click="selectAction(action)">
-            <td>{{action.name}} <span class="glyphicon glyphicon-ok" ng-show="action==selectedAction"></span></td>
-        </tr>
-    </table>
+    <div ng-repeat="(serviceName, availableActions) in services">
+        {{serviceName}}
+        <table class="table table-bordered table-hover">
+            <tr ng-repeat="(actionName, action) in availableActions" ng-click="selectAction(serviceName + '.' + actionName)">
+                <td>{{actionName}} <span class="glyphicon glyphicon-ok" ng-show="serviceName + '.' + actionName==selectedAction"></span></td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="ok()">OK</button>

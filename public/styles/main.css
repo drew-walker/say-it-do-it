@@ -1,3 +1,12 @@
+body { font-family: "HelveticaNeue-Light","Helvetica Neue",Helvetica,Arial,sans-serif }
+
+.navbar-default .navbar-brand { color:#ff9000; font-size:28px; }
+.navbar-default .navbar-brand:hover { background-color:#ff9000; color:#fff;  }
+
+.navbar-default .navbar-nav > li > a.login-icon { padding:10px; }
+.navbar-default .navbar-nav > li > a.login-icon > img { width:30px; height:30px; }
+.navbar-default .navbar-nav > li:hover { background-color:#eee; }
+
 .modal-open .modal { background:rgba(0,0,0,0.8); }
 .navbar-static-top { margin-bottom:0; }
 
@@ -27,5 +36,3 @@
     to { transform: rotate(360deg); }
 }
 
-.navbar-nav > li > a.login-icon { margin:10px; padding:0; }
-.navbar-nav > li > a.login-icon > img { width:30px; height:30px; }

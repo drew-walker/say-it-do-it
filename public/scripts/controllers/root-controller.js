@@ -4,90 +4,45 @@ recognition.lang = "en-AU";
 var commandRecognition = new webkitSpeechRecognition();
 commandRecognition.lang = "en-AU";
 
-angular.module('SayIt').controller('RootController', function($scope, $http, $modal, $log) {
-
+angular.module('SayIt').controller('RootController', function($scope, $http, $modal, $log, commands, config, auth, SIDI) {
+    $scope.auth = auth;
     $scope.recognizing = false;
     $scope.final_transcript = '';
-    $scope.commands = [{
-        trigger : 'turn off (.+)',
-        do : {
-            name: 'Turn off the lights',
-            call: function(command, args) {
-                var lightIdentifier = args[0].replace(/ /g, '-') ;
-                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/off").success(function() {
-                    command.do.callback.apply(this, arguments);
-                    command.do.running = false;
-                });
-            },
-            callback: function(response) {
-                //console.log(response);
-            }
-        }
-    }, {
-        trigger : 'turn on (.+)',
-        do : {
-            name: 'Turn on the lights',
-            call: function(command, args) {
-                var lightIdentifier = args[0].replace(/ /g, '-') ;
-                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/on").success(function() {
-                    command.do.callback.apply(this, arguments);
-                    command.do.running = false;
-                });
-            },
-            callback: function(response) {
-                //console.log(response);
-            }
-        }
-    }, {
-        trigger : 'turn up (.+)',
-        do : {
-            name: 'Brighten the lights',
-            call: function(command, args) {
-                var lightIdentifier = args[0].replace(/ /g, '-') ;
-                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/brighten").success(function() {
-                    command.do.callback.apply(this, arguments);
-                    command.do.running = false;
-                });
-            },
-            callback: function(response) {
-                //console.log(response);
-            }
-        }
-    }, {
-        trigger : 'turn down (.+)',
-        do : {
-            name: 'Darken the lights',
-            call: function(command, args) {
-                var lightIdentifier = args[0].replace(/ /g, '-') ;
-                $http.get("/api/v1/hue/lights/" + lightIdentifier + "/darken").success(function() {
-                    command.do.callback.apply(this, arguments);
-                    command.do.running = false;
-                });
-            },
-            callback: function(response) {
-                //console.log(response);
-            }
-        }
-    }];
+
+    $scope.auth.$onAuth(function(authData) {
+        $scope.authData = authData;
+        $scope.commands = commands;
+    });
+
+    $scope.try = function() {
+        $scope.authData = null;
+        $scope.error = null;
+
+        $scope.auth.$authAnonymously().then(function(authData) {
+            $scope.authData = authData;
+        }).catch(function(error) {
+            $scope.error = error;
+        });
+    };
 
     $scope.do = function(trigger, args) {
         var command = $scope.commands.filter(function(command) {
             return command.trigger == trigger;
         })[0];
         if (command && command.do) {
-            command.do.running = true;
-            command.do.call(command, args);
+            command.running = true;
+            var commandParts = command.do.split('.');
+            commandObject = SIDI.services[commandParts[0]][commandParts[1]];
+            commandObject.call(commandObject, args, function() {
+                command.running = false;
+            });
         }
     };
 
     $scope.add = function(command) {
-        $scope.commands.push({
+        $scope.commands.$add({
             trigger:command
         });
-    };
-
-    $scope.delete = function(command) {
-
     };
 
     $scope.listen = function() {
@@ -110,7 +65,6 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
                     var modalInstance = $modal.open({
                         templateUrl: 'views/do.html',
                         backdrop: 'static',
-                        size: 'sm',
                         controller: 'DoModalController',
                         resolve: {
                             command: function () {
@@ -120,7 +74,7 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
                     });
 
                     modalInstance.result.then(function (commandAndAction) {
-                        $scope.commands.push(commandAndAction);
+                        $scope.commands.$add(commandAndAction);
                     }, function () {
                         $log.info('Modal dismissed at: ' + new Date());
                     });

@@ -8,53 +8,64 @@ html(ng-app="SayIt")
         nav.navbar.navbar-default.navbar-static-top
             .container-fluid
                 .navbar-header
-                    a.navbar-brand SayItDoIt
+                    button.navbar-toggle.collapsed(ng-click="isCollapsed = !isCollapsed")
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href="/") SIDI
                 ul.nav.navbar-nav(ng-hide="commands.length === 0")
                     li
-                        a(ng-click="listen()")
+                        a(href="" ng-click="listen()")
                             span.glyphicon.glyphicon-volume-up(ng-class="{ 'pulse' : recognizing }")
-                            span(ng-show="recognizing") Say it and I'll do it
-                            span(ng-show="!recognizing && final_transcript") {{final_transcript}}
-                ul.nav.navbar-nav.navbar-right(ng-controller="LoginController")
-                    li(ng-show="!loggedIn")
-                        a.login-icon(href="" ng-click="login('twitter')")
-                            img(src="images/twitter-icon-circle.png")
-                    li(ng-show="!loggedIn")
-                        a.login-icon(href="" ng-click="login('facebook')")
-                            img(src="images/facebook-icon-circle.png")
-                    li(ng-show="!loggedIn")
-                        a.login-icon(href="" ng-click="login('google')")
-                            img(src="images/google-icon-circle.png")
-                    li(ng-show="loggedIn && recognizing")
-                        a
-                            span.glyphicon.glyphicon-refresh.spin
-                    li(ng-show="loggedIn && commands.length > 0")
-                        a(href="" ng-click="recordCommand()" style="margin-right:10px;") +
-                    li(ng-show="loggedIn" dropdown)
-                        a(href="" class="dropdown-toggle" dropdown-toggle style="padding:0; margin:10px; border-radius:15px;overflow:hidden;")
-                            img(ng-src="{{imageUrl}}" style="height:30px; display:block")
-                        ul.dropdown-menu
-                            li(role="presentation" class="dropdown-header") {{name}}
-                            li
-                                a(href="" ng-click="logout()") Log out
-        .text-center(ng-show="commands.length === 0")
-            p SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.
-            p
+                            span.ng-cloak(ng-show="recognizing") &nbsp;Say it and I'll do it
+                            span.ng-cloak(ng-show="!recognizing && final_transcript") &nbsp;{{final_transcript}}
+                nav.pull-right.ng-cloak.collapse.navbar-collapse(ng-controller="LoginController" collapse="isCollapsed")
+                    ul.nav.navbar-nav.navbar-right(ng-show="loggedIn && commands.length > 0")
+                        li
+                            a(href="" ng-click="recordCommand()")
+                                span.glyphicon.glyphicon-plus
+                    p.navbar-text.ng-cloak {{name}}
+                    ul.nav.navbar-nav.navbar-right
+                        li(ng-show="!loggedIn")
+                            a.login-icon(href="" ng-click="login('twitter')")
+                                img(src="images/twitter-icon-circle.png")
+                        li(ng-show="!loggedIn")
+                            a.login-icon(href="" ng-click="login('facebook')")
+                                img(src="images/facebook-icon-circle.png")
+                        li(ng-show="!loggedIn")
+                            a.login-icon(href="" ng-click="login('google')")
+                                img(src="images/google-icon-circle.png")
+                        li(ng-show="loggedIn && recognizing")
+                            a
+                                span.glyphicon.glyphicon-refresh.spin
+                        li(ng-show="loggedIn" dropdown)
+                            a(href="" class="dropdown-toggle" dropdown-toggle style="padding:0; margin:10px; border-radius:15px;overflow:hidden;")
+                                img(ng-src="{{imageUrl}}" style="height:30px; display:block")
+                            ul.dropdown-menu
+                                li(role="presentation" class="dropdown-header") {{name}}
+                                li
+                                    a(href="" ng-click="logout()") Log out
+        .text-center.ng-cloak
+            p(ng-hide="authData" style="padding-top:20px") SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.
+            p(ng-hide="authData")
+                a.btn.btn-primary(href="" ng-click="try()") Try a demo
+            p(ng-show="authData && commands.length === 0" style="padding-top:20px")
                 a.btn.btn-default.btn-lg(ng-click="recordCommand()") +
-            p.text-muted Click '+' and start talking to setup your first voice command.
-        div(ng-hide="commands.length === 0")
+            p.text-muted(ng-show="authData && commands.length === 0") Click '+' and start talking to setup your first voice command.
+        div.ng-cloak(ng-show="authData && commands.length > 0")
             table.table.table-hover.table-bordered
                 tr
                     th(width="50%") Say
                     th(width="50%") Do
-                tr(ng-repeat="command in commands" ng-class="{ 'success' : command.matched === true }" ng-mouseover="showControls=true" ng-mouseout="showControls=false")
+                tr(ng-repeat="(key, command) in commands" ng-class="{ 'success' : command.matched === true && command.running === true }" ng-mouseover="showControls=true" ng-mouseout="showControls=false")
                     td "{{command.trigger}}"
                     td(style="position:relative")
                         span.btn-group(ng-show="showControls" style="position:absolute; right:-1px; top:-1px;")
                             button.btn.btn-primary(ng-click="do(command.trigger)" style="height:38px; border-radius:0;") RUN
-                            button.btn.btn-danger(style="height:38px; border-radius:0;") DELETE
-                        span {{command.do.name}}
-                        span.glyphicon.glyphicon-refresh(ng-show="command.do.running" ng-class="{ 'spin' : command.do.running }")
+                            button.btn.btn-danger(ng-click="commands.$remove(command)" style="height:38px; border-radius:0;") DELETE
+                        span {{command.do}}&nbsp;
+                        span.glyphicon.glyphicon-refresh(ng-show="command.running" ng-class="{ 'spin' : command.running }")
             p.text-muted.text-center(ng-show="commands.length < 3") Click '+' to setup another voice command.
     script(src="bower_components/angular/angular.min.js")
     script(src="bower_components/angular-bootstrap/ui-bootstrap.js")
@@ -76,6 +87,10 @@ html(ng-app="SayIt")
                 }
             };
         });
+    script(src="scripts/factories/commands-factory.js")
+    script(src="scripts/factories/auth-factory.js")
     script(src="scripts/controllers/login-controller.js")
     script(src="scripts/controllers/root-controller.js")
     script(src="scripts/controllers/do-modal-controller.js")
+    script(src="scripts/modules/sidi/sidi.js")
+    script(src="scripts/modules/hue/hue.js")

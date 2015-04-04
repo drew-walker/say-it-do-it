@@ -1,22 +1,6 @@
-angular.module('SayIt').controller('DoModalController', function($scope, $modalInstance, $modal, command) {
+angular.module('SayIt').controller('DoModalController', function($scope, $modalInstance, $modal, command, SIDI) {
     $scope.command = command;
-
-    $scope.availableActions = [
-        {
-            name: 'Turn on the lights',
-            call: "/api/v1/hue/lights/3/on",
-            callback: function(response) {
-                console.log(response);
-            }
-        },
-        {
-            name: 'Turn off the lights',
-            call: "/api/v1/hue/lights/3/on",
-            callback: function(response) {
-                console.log(response);
-            }
-        }
-    ];
+    $scope.services = SIDI.services;
     $scope.selectedAction = {};
 
     $scope.ok = function () {
