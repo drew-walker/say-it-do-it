@@ -13,7 +13,7 @@ html(ng-app="SayIt")
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
-                    a.navbar-brand(href="/") SIDI
+                    a.navbar-brand(href="#/") SIDI
                 ul.nav.navbar-nav(ng-hide="commands.length === 0")
                     li
                         a(href="" ng-click="listen()")
@@ -71,9 +71,11 @@ html(ng-app="SayIt")
             };
         });
     script(src="scripts/factories/commands-factory.js")
+    script(src="scripts/factories/settings-factory.js")
     script(src="scripts/factories/auth-factory.js")
     script(src="scripts/controllers/login-controller.js")
     script(src="scripts/controllers/root-controller.js")
+    script(src="scripts/controllers/settings-controller.js")
     script(src="scripts/controllers/do-modal-controller.js")
     script(src="scripts/modules/sidi/sidi.js")
     script(src="scripts/modules/hue/hue.js")

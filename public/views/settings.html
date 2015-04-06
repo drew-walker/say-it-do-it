@@ -1,1 +1,9 @@
 <h1>Settings</h1>
+<div ng-repeat="setting in settings">
+    <h2>{{setting.$id}}</h2>
+    <div ng-repeat="(key, property) in setting">
+        {{key}}
+        <input type="text" ng-model="property" />
+    </div>
+</div>
+<button class="btn btn-primary" ng-click="save()">Save</button>

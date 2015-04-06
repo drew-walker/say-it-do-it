@@ -5,6 +5,7 @@ angular.module('SayIt', ['ui.bootstrap', 'firebase', 'SIDI', 'ngRoute'])
                 templateUrl: '/views/index.html'
             })
             .when('/settings', {
-                templateUrl: '/views/settings.html'
+                templateUrl: '/views/settings.html',
+                controller: 'SettingsController'
             })
     });
