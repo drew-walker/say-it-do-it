@@ -45,29 +45,12 @@ html(ng-app="SayIt")
                             ul.dropdown-menu
                                 li(role="presentation" class="dropdown-header") {{name}}
                                 li
+                                    a(ng-href="#/settings") Settings
+                                li
                                     a(href="" ng-click="logout()") Log out
-        .text-center.ng-cloak
-            p(ng-hide="authData" style="padding-top:20px") SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.
-            p(ng-hide="authData")
-                a.btn.btn-primary(href="" ng-click="try()") Try a demo
-            p(ng-show="authData && commands.length === 0" style="padding-top:20px")
-                a.btn.btn-default.btn-lg(ng-click="recordCommand()") +
-            p.text-muted(ng-show="authData && commands.length === 0") Click '+' and start talking to setup your first voice command.
-        div.ng-cloak(ng-show="authData && commands.length > 0")
-            table.table.table-hover.table-bordered
-                tr
-                    th(width="50%") Say
-                    th(width="50%") Do
-                tr(ng-repeat="(key, command) in commands" ng-class="{ 'success' : command.matched === true && command.running === true }" ng-mouseover="showControls=true" ng-mouseout="showControls=false")
-                    td "{{command.trigger}}"
-                    td(style="position:relative")
-                        span.btn-group(ng-show="showControls" style="position:absolute; right:-1px; top:-1px;")
-                            button.btn.btn-primary(ng-click="do(command.trigger)" style="height:38px; border-radius:0;") RUN
-                            button.btn.btn-danger(ng-click="commands.$remove(command)" style="height:38px; border-radius:0;") DELETE
-                        span {{command.do}}&nbsp;
-                        span.glyphicon.glyphicon-refresh(ng-show="command.running" ng-class="{ 'spin' : command.running }")
-            p.text-muted.text-center(ng-show="commands.length < 3") Click '+' to setup another voice command.
+        ng-view
     script(src="bower_components/angular/angular.min.js")
+    script(src="bower_components/angular-route/angular-route.min.js")
     script(src="bower_components/angular-bootstrap/ui-bootstrap.js")
     script(src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js")
     script(src="bower_components/firebase/firebase.js")

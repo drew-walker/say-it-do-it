@@ -1,0 +1,30 @@
+<div class="text-center">
+    <p ng-hide="authData" style="padding-top:20px">SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.</p>
+    <p ng-hide="authData">
+        <a class="btn.btn-primary" href="" ng-click="try()">Try a demo</a>
+    </p>
+    <p ng-show="authData && commands.length === 0" style="padding-top:20px">
+        <a class="btn btn-default btn-lg" ng-click="recordCommand()">+</a>
+    </p>
+    <p class="text-muted" ng-show="authData && commands.length === 0">Click '+' and start talking to setup your first voice command.</p>
+</div>
+<div ng-show="authData && commands.length > 0">
+    <table class="table table-hover table-bordered">
+        <tr>
+            <th width="50%">Say</th>
+            <th width="50%">Do</th>
+        </tr>
+        <tr ng-repeat="(key, command) in commands" ng-class="{ 'success' : command.matched === true && command.running === true }" ng-mouseover="showControls=true" ng-mouseout="showControls=false">
+            <td>"{{command.trigger}}"</td>
+            <td style="position:relative">
+                <span class="btn-group" ng-show="showControls" style="position:absolute; right:-1px; top:-1px;">
+                    <button class="btn btn-primary" ng-click="do(command.trigger)" style="height:38px; border-radius:0;">RUN</button>
+                    <button class="btn btn-danger" ng-click="commands.$remove(command)" style="height:38px; border-radius:0;">DELETE</button>
+                </span>
+                <span>{{command.do}}&nbsp;</span>
+                <span class="glyphicon glyphicon-refresh" ng-show="command.running" ng-class="{ 'spin' : command.running }" />
+            </td>
+        </tr>
+    </table>
+    <p class="text-muted text-center" ng-show="commands.length < 3">Click '+' to setup another voice command.</p>
+</div>
