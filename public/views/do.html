@@ -15,7 +15,7 @@
         {{serviceName}}
         <table class="table table-bordered table-hover">
             <tr ng-repeat="(actionName, action) in availableActions" ng-click="selectAction(serviceName + '.' + actionName)">
-                <td>{{actionName}} <span class="glyphicon glyphicon-ok" ng-show="serviceName + '.' + actionName==selectedAction"></span></td>
+                <td>{{action.name}} <span class="glyphicon glyphicon-ok" ng-show="serviceName + '.' + actionName==selectedAction"></span></td>
             </tr>
         </table>
     </div>
