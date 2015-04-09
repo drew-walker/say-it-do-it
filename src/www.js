@@ -14,6 +14,13 @@ module.exports = function(express, request, require, path) {
     };
 
     self._bindRoutes = function _bindRoutes() {
+        app.get('*',function(req,res,next){
+            if(req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto']!='https')
+                res.redirect('https://' + req.hostname + req.url);
+            else
+                next();
+        });
+
         app.get('/', function(req, res) {
             self._getTemplateData(function(data) {
                 res.render('index', data);
