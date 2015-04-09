@@ -1,1 +1,1 @@
-web: node www.js
+web: node autowire.js
