@@ -1,6 +1,6 @@
 {
   "name": "say-it-do-it",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "SayItDoIt uses voice commands to perform custom actions (like turning on your lights). Think Siri, on steroids - but without the back-chat.",
   "main": "www.js",
   "dependencies": {
@@ -8,13 +8,17 @@
     "express": "^4.12.0",
     "jade": "^1.9.2",
     "philips-hue-api": "^0.1.5",
+    "redis": "^0.12.1",
     "request": "^2.53.0",
     "twitter": "^1.2.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "sinon": "^1.14.1"
+  },
   "scripts": {
-    "start": "node www.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node autowire.js",
+    "test": "mocha",
     "postinstall": "./node_modules/bower/bin/bower install"
   },
   "repository": {
