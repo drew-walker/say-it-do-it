@@ -1,4 +1,4 @@
-// TODO: This file should be turn into a less hacky, re-usable module!
+// TODO: This file should be turned into a less hacky, re-usable module!
 var vm = require('vm'),
     Module = require('module'),
     fs = require('fs'),

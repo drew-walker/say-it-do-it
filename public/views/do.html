@@ -11,13 +11,15 @@
             </div>
         </div>
     </form>
-    <div ng-repeat="(serviceName, availableActions) in services">
-        {{serviceName}}
-        <table class="table table-bordered table-hover">
-            <tr ng-repeat="(actionName, action) in availableActions" ng-click="selectAction(serviceName + '.' + actionName)">
-                <td>{{action.name}} <span class="glyphicon glyphicon-ok" ng-show="serviceName + '.' + actionName==selectedAction"></span></td>
-            </tr>
-        </table>
+    <div style="position:relative">
+        <span ng-repeat="(serviceName, service) in services" dropdown>
+            <img style="width:30px; height:30px; border-radius:15px;" src="/images/logo-{{serviceName}}.png" alt="{{service.friendlyName}}" dropdown-toggle tooltip="{{service.friendlyName}}" />
+            <ul class="dropdown-menu">
+                <li ng-repeat="(actionName, action) in service.actions">
+                    <a ng-click="selectAction(serviceName + '.' + actionName)">{{action.name}} <span class="glyphicon glyphicon-ok" ng-show="serviceName + '.' + actionName==selectedAction"></a></span>
+                </li>
+            </ul>
+        </span>
     </div>
 </div>
 <div class="modal-footer">

@@ -1,4 +1,4 @@
-angular.module('SIDI', ['hue']);
+angular.module('SIDI', ['hue', 'spotify', 'pandora']);
 
 angular.module('SIDI').service('SIDI', [function() {
     var services = {};

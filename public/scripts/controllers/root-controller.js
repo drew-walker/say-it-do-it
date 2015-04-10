@@ -4,7 +4,7 @@ recognition.lang = "en-AU";
 var commandRecognition = new webkitSpeechRecognition();
 commandRecognition.lang = "en-AU";
 
-angular.module('SayIt').controller('RootController', function($scope, $http, $modal, $log, commands, config, auth, SIDI) {
+angular.module('SayIt').controller('RootController', function($scope, $http, $modal, $log, commands, config, auth, SIDI, $sce) {
     $scope.auth = auth;
     $scope.recognizing = false;
     $scope.final_transcript = '';
@@ -32,7 +32,7 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
         if (command && command.do) {
             command.running = true;
             var commandParts = command.do.split('.');
-            commandObject = SIDI.services[commandParts[0]][commandParts[1]];
+            commandObject = SIDI.services[commandParts[0]].actions[commandParts[1]];
             commandObject.call(commandObject, args, function() {
                 command.running = false;
             });
@@ -43,6 +43,14 @@ angular.module('SayIt').controller('RootController', function($scope, $http, $mo
         $scope.commands.$add({
             trigger:command
         });
+    };
+
+    $scope.getFriendlyCommandName = function getFriendlyCommandName(command) {
+        var commandParts = command.split('.');
+        var serviceKey = commandParts[0];
+        var actionKey = commandParts[1];
+        var serviceObject = SIDI.services[serviceKey];
+        return $sce.trustAsHtml('<span class="service-icon" style="background-image:url(\'/images/logo-' + serviceKey + '.png\')">' + serviceObject.friendlyName + '</span> ' + serviceObject.actions[actionKey].name);
     };
 
     $scope.listen = function() {
